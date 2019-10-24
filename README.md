@@ -1,1 +1,0 @@
-Shiny_Mapshot_Example
