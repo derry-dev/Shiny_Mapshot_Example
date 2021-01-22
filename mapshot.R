@@ -14,10 +14,10 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   
-  map <- reactiveValues(dat = 0)
+  map <- reactiveValues(dat = leaflet() %>% addTiles())
 
   output$map <- renderLeaflet({
-    map$dat <- leaflet() %>% addTiles()
+    map$dat
   })
   
   observeEvent(input$add_points, {
@@ -27,14 +27,10 @@ server <- function(input, output, session) {
       lng = runif(100, min = -180, max = 180)
     )
     
-    # map$dat <- map$dat %>% clearGroup("Points") %>% addCircleMarkers(data = coords, group = "Points")
+    map$dat <- map$dat %>% clearGroup("Points") %>% addCircleMarkers(data = coords, group = "Points")
     
     leafletProxy("map") %>% clearGroup("Points") %>% addCircleMarkers(data = coords, group = "Points")
     
-  })
-  
-  observeEvent(output$map, {
-    map$dat <- leafletProxy("map")
   })
   
   output$dl <- downloadHandler(
